@@ -6,6 +6,7 @@ const STATUS = {
 };
 
 const initialCount = 5;
+const restTime = 11;
 
 const convertToSeconds = (minutes) => {
   const seconds = minutes * 60;
@@ -15,6 +16,8 @@ const convertToSeconds = (minutes) => {
 const Timer = () => {
   const [secondsRemaining, setSecondsRemaining] = useState(initialCount);
   const [status, setStatus] = useState(STATUS.STOPPED);
+  const [isRest, setIsRest] = useState(false);
+  const [sessionCount, setSessionCount] = useState(1);
 
   const secondsToDisplay = secondsRemaining % 60;
   const minutesRemaining = (secondsRemaining - secondsToDisplay) / 60;
@@ -29,6 +32,8 @@ const Timer = () => {
   };
   const handleReset = () => {
     setStatus(STATUS.STOPPED);
+    setIsRest(false);
+    setSessionCount(1);
     setSecondsRemaining(initialCount);
   };
   const changeCountdown = (e) => {
@@ -42,7 +47,22 @@ const Timer = () => {
       if (secondsRemaining > 0) {
         setSecondsRemaining(secondsRemaining - 1);
       } else {
-        setStatus(STATUS.STOPPED);
+        console.log(isRest);
+        // doesn't run as is because state updates in React are asynchrounous!!
+        // setIsRest(!isRest);
+        const shouldRest = !isRest;
+        if (shouldRest) {
+          console.log("Resting, time set to restTime");
+          setSecondsRemaining(restTime);
+        } else {
+          console.log("Working, time set to initialCount");
+          setSecondsRemaining(initialCount);
+        }
+        if (isRest) {
+          setSessionCount(sessionCount + 1);
+        }
+        setIsRest(!isRest);
+        // setStatus(STATUS.STOPPED);
       }
     },
     status === STATUS.STARTED ? 1000 : null
@@ -65,6 +85,8 @@ const Timer = () => {
         {twoDigits(secondsToDisplay)}
       </div>
       <div>Status: {status}</div>
+      <div>Session Count: {sessionCount}</div>
+      {isRest ? <h2>Rest Time!</h2> : <h2>Work Time!</h2>}
     </div>
   );
 };
