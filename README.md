@@ -15,4 +15,6 @@ Meh, that's a feature to add later, for now just focus on getting basic timer up
 
 Did leetcode today... leave me alone lol
 
+Did leetcode today again, I'm on a roll. Will finish this project this weekend
+
 Next - add chart js functionality (Create a mino project fir chart js?)
